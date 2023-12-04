@@ -4,8 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-
 import com.siriam.empmgt.model.Employee;
 import com.siriam.empmgt.repository.EmployeeRepository;
 
@@ -47,5 +50,26 @@ public class EmployeeServiceImpl implements EmployeeService {
 		empRepo.deleteById(id);
 		
 	}
+
+	@Override
+	public Page<Employee> findPagiated(int pageNo, int pageSize, String sortField, String sortDirection) {
+		
+		//Sort sort= sortDirection.equalsIgnoreCase(Sort.direaction.ASC.name());
+		Sort sort = sortDirection.equals(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending():
+			Sort.by(sortField).descending();
+		Pageable pageable=PageRequest.of(pageNo-1,pageSize,sort);
+		
+		return empRepo.findAll(pageable);
+	}
+
+	// without sorting
+	/*@Override
+	public Page<Employee> findPagiated(int pageNo, int pageSize) {
+
+		Pageable pageable=PageRequest.of(pageNo-1,pageSize);
+		
+		return empRepo.findAll(pageable);
+	}*/
+	
 
 }

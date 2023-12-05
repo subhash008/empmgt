@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import com.siriam.empmgt.exceptions.EmployeeAlreadyExistsException;
 import com.siriam.empmgt.model.Employee;
 import com.siriam.empmgt.repository.EmployeeRepository;
 
@@ -27,6 +29,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public void saveEmployee(Employee employee) {
+		
+		if(empRepo.existsById(employee.getId())) {
+			throw new EmployeeAlreadyExistsException();
+		}
 		
 		empRepo.save(employee);
 		
@@ -55,7 +61,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public Page<Employee> findPagiated(int pageNo, int pageSize, String sortField, String sortDirection) {
 		
 		//Sort sort= sortDirection.equalsIgnoreCase(Sort.direaction.ASC.name());
-		Sort sort = sortDirection.equals(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending():
+		Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending():
 			Sort.by(sortField).descending();
 		Pageable pageable=PageRequest.of(pageNo-1,pageSize,sort);
 		

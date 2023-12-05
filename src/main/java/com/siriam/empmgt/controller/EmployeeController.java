@@ -22,6 +22,11 @@ public class EmployeeController {
 	@Autowired
 	private EmployeeService empServ;
 	
+	@GetMapping
+	public String getHome() {
+		return "index";
+	}
+	
 	//without pagination
 	/*@GetMapping("emplist")
 	public String viewEmployees(Model model) {

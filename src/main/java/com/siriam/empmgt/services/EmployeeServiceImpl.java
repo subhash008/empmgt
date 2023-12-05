@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.siriam.empmgt.exceptions.EmployeeAlreadyExistsException;
+import com.siriam.empmgt.exceptions.EmployeeNotFoundException;
 import com.siriam.empmgt.model.Employee;
 import com.siriam.empmgt.repository.EmployeeRepository;
 
@@ -45,7 +46,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		if(optional.isPresent()) {
 			emp=optional.get();
 		}else {
-			throw new RuntimeException ("Employee not found with id : " + id);
+			throw new EmployeeNotFoundException ("Employee not found with id : " + id);
 		}
 		return emp;
 	}

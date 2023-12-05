@@ -3,6 +3,8 @@ package com.siriam.empmgt.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.siriam.empmgt.exceptions.EmployeeAlreadyExistsException;
+import com.siriam.empmgt.exceptions.EmployeeNotFoundException;
 import com.siriam.empmgt.model.Employee;
 import com.siriam.empmgt.services.EmployeeService;
 
@@ -23,9 +27,16 @@ public class EmployeeRestController {
 	EmployeeService empSrv;
 	
 	@GetMapping("/{id}")
-	public Employee getEmp(@PathVariable (value="id")long id) {
-		
-		return empSrv.getEmployeeById(id);
+	public ResponseEntity<?> getEmp(@PathVariable (value="id")long id) {
+		Employee emp;
+		try {
+			emp=empSrv.getEmployeeById(id);
+		}
+		catch(EmployeeNotFoundException ex) {
+			
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(emp);
 	}
 	@GetMapping
 	public List<Employee> getAllEmp(){
@@ -35,9 +46,14 @@ public class EmployeeRestController {
 	}
 	
 	@PostMapping
-	public Employee addEmp(@RequestBody Employee emp ) {
-		empSrv.saveEmployee(emp);
-		return emp;
+	public ResponseEntity<?> addEmp(@RequestBody Employee emp ) {
+		try{
+			empSrv.saveEmployee(emp);
+		}
+		catch(EmployeeAlreadyExistsException ex) {
+			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(ex.getMessage());
+		}
+		return ResponseEntity.status(HttpStatus.CREATED).body(emp);
 	}
 	
 	@PutMapping
@@ -49,10 +65,18 @@ public class EmployeeRestController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public Employee deleteEmp(@PathVariable (value="id")long id) {
-		Employee emp= empSrv.getEmployeeById(id);
-		empSrv.deleteEmployeeById(id);
-		return emp;
+	public ResponseEntity<?>  deleteEmp(@PathVariable (value="id")long id) {
+		Employee emp;
+		try {
+			emp= empSrv.getEmployeeById(id);
+			empSrv.deleteEmployeeById(id);
+			
+		}
+		catch (EmployeeNotFoundException ex) {
+			
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+		}
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(emp);
 	}
 
 }

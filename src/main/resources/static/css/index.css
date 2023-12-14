@@ -3,6 +3,15 @@
 	height: 50px;
 }
 
+.footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #f8f9fa;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
 .fron-img{
 	max-height: 100px;
 }
@@ -11,7 +20,7 @@
       border-top-right-radius: 0.5rem;
     }
 
-    @media (min-width: 992px) {
+ @media (min-width: 992px) {
       .rounded-tr-lg-0 {
         border-top-right-radius: 0;
       }
@@ -20,3 +29,10 @@
         border-bottom-left-radius: 0.5rem;
       }
     }
+ .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }

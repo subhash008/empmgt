@@ -12,119 +12,94 @@
 	</head>
 	<body>
 		<div class="container p-2" >
-			<nav class="navbar navbar-expand-lg bg-body-tertiary">
-			  <div class="container">
-			    <a class="navbar-brand" href="http://localhost:9090">
-					
-				 <img src="/img/logo.png" class="logo" >Siriam Infotech
-				</a>
-			    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-			      <span class="navbar-toggler-icon"></span>
-			    </button>
-			    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-			      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-			        <li class="nav-item">
-			          <a class="nav-link active" aria-current="page" href="http://localhost:9090">Home</a>
-			        </li>
-			        <li class="nav-item">
-			          <a class="nav-link" href="about">About Project</a>
-			        </li>
-			       <li class="nav-item">
-			          <a class="nav-link" href="tech">Technologies in Use</a>
-			        </li>
-			        <li class="nav-item">
-			          <a class="nav-link" href="contact">Contact Us</a>
-			        </li>
-			      </ul>
-			        <ul class="navbar-nav d-flex flex-row me-1">
-			        <li class="nav-item login">
-						 <a class="nav-link" href="login"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
- 						 <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664z"/>
-						</svg> Login</a>
-					 </li>
-			      </ul>
-			    
-			     
-			    </div>
-			  </div>
-			</nav>
-			<a th:href="@{/showNewEmployeeForm}" class="btn btn-primary">Add Employee</a>
-			
-			<h1> Employees List</h1>
-			<table border="2px" class="table table-striped">
-				<thead> 
-					<tr>
-						<th>
-							<a th:href="@{'/page/' + ${currentPage} + '?sortField=firstName&sortDir=' + ${reverseSortDir}}">
-       							Employee First Name</a>
-       					</th>
-						<th><a th:href="@{'/page/' + ${currentPage} + '?sortField=lastName&sortDir=' + ${reverseSortDir}}">
-      							 Employee Last Name</a></th>
-						<th><a th:href="@{'/page/' + ${currentPage} + '?sortField=email&sortDir=' + ${reverseSortDir}}">
-       							Employee Email</a></th>
-						<th>Actions</th>		
-					</tr>			
-				</thead>
-				<tbody>
-					<tr th:each="employee : ${listEmp}">
-						<td th:text ="${employee.firstName}"></td>
-						<td th:text ="${employee.lastName}"></td>
-						<td th:text ="${employee.email}"></td>
-						<td>
-							<a th:href="@{/showFormForUpdate/{id}(id=${employee.id})}" class="btn btn-primary">Update</a>
-							<a href="#" class="btn btn-danger" data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a>
-								
-								<!-- Delete Confirmation Modal -->
-								<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
-								    <div class="modal-dialog" role="document">
-								        <div class="modal-content">
-								            <div class="modal-header">
-								                <h5 class="modal-title" id="deleteConfirmationModalLabel">Delete Confirmation</h5>
-								                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-								                    <span aria-hidden="true">&times;</span>
-								                </button>
-								            </div>
-								            <div class="modal-body">
-								                <p>Are you sure you want to delete this item? <span th:text ="${employee.lastName}"> </span></p>
-								                <span th:text ="${employee.id}">
-								            </div>
-								            <div class="modal-footer">
-								                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-								                <!-- Add your delete logic or form submission here -->
-								                <a th:href="@{/deleteEmployee/{id}(id=${employee.id})}" class="btn btn-danger">Delete</a>
-								            </div>
-								        </div>
-								    </div>
-								</div>
-						</td>
-					</tr>
-				</tbody>
+			<div th:replace="fragments/comman :: navbar"></div>
+			<hr>
+			<div class="row pt-4 px-2" style="min-height: 800px;">
+			<div th:replace="fragments/comman :: left-sidebar" >
 				
-			</table>
-			<div th:if="${totalPages >1}">
-				<div class="row col-sm-10">
-					<div class = "col-sm-2">
-						Total Rows: <span th:text="${totalItems}"></span>
-					</div>
-					<div class = "col-sm-1">
-						<span th:each="i: ${#numbers.sequence(1,totalPages)}">
-							<a th:if="${currentPage != i}" th:href="@{'/page/' + ${i}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
-							<span th:unless="${currentPage != i}" >[[${i}]]</span> &nbsp; &nbsp;
-						</span>
-					</div>
-					<div class = "col-sm-1">
-						<a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>
-						<span th:unless = "${currentPage < totalPages}">next</span>
-					</div>
-					<div class = "col-sm-1">
-						<a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${totalPages}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Last</a>
-						<span th:unless = "${currentPage < totalPages}">Last</span>
-					</div>
-					
-				</div>
 			</div>
+				<div class="col-9">
 			
-		</div>	
-		
+					<h1> Employees List</h1>
+					<table border="1px" class="table table-striped">
+						<thead> 
+							<tr>
+								<th>
+									<a th:href="@{'/page/' + ${currentPage} + '?sortField=firstName&sortDir=' + ${reverseSortDir}}">
+		       							Employee First Name</a>
+		       					</th>
+								<th><a th:href="@{'/page/' + ${currentPage} + '?sortField=lastName&sortDir=' + ${reverseSortDir}}">
+		      							 Employee Last Name</a></th>
+								<th><a th:href="@{'/page/' + ${currentPage} + '?sortField=email&sortDir=' + ${reverseSortDir}}">
+		       							Employee Email</a></th>
+								<th>Actions</th>		
+							</tr>			
+						</thead>
+						<tbody>
+							<tr th:each="employee : ${listEmp}">
+								<td th:text ="${employee.firstName}"></td>
+								<td th:text ="${employee.lastName}"></td>
+								<td th:text ="${employee.email}"></td>
+								<td>
+									<a th:href="@{/showFormForUpdate/{id}(id=${employee.id})}" class="btn btn-primary">Update</a>
+									<a href="#" class="btn btn-danger" data-toggle="modal" th:data-target="${'#deleteConfirmationModal'+employee.id}">Delete</a>
+										
+										<!-- Delete Confirmation Modal -->
+										<div class="modal fade" th:id="${'deleteConfirmationModal'+employee.id}" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+										    <div class="modal-dialog" role="document">
+										        <div class="modal-content">
+										            <div class="modal-header">
+										                <h5 class="modal-title" id="deleteConfirmationModalLabel">Delete Confirmation</h5>
+										                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										                    <span aria-hidden="true">&times;</span>
+										                </button>
+										            </div>
+										            <div class="modal-body">
+										                <p>Are you sure you want to delete record of <span th:text ="${employee.firstName}"> </span> having  EMP ID <span th:text ="${employee.id}">?</p>
+										             
+										            </div>
+										            <div class="modal-footer">
+										                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+										                <!-- Add your delete logic or form submission here -->
+										                <a th:href="@{/deleteEmployee/{id}(id=${employee.id})}" class="btn btn-danger">Delete</a>
+										            </div>
+										        </div>
+										    </div>
+										</div>
+								</td>
+							</tr>
+						</tbody>
+						
+					</table>
+					<div th:if="${totalPages >1}">
+						<div class="row col-sm-10">
+							<div class = "col-sm-2">
+								Total Rows: <span th:text="${totalItems}"></span>
+							</div>
+							<div class = "col-sm-1">
+								<span th:each="i: ${#numbers.sequence(1,totalPages)}">
+									<a th:if="${currentPage != i}" th:href="@{'/page/' + ${i}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
+									<span th:unless="${currentPage != i}" >[[${i}]]</span> &nbsp; &nbsp;
+								</span>
+							</div>
+							<div class = "col-sm-1">
+								<a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>
+								<span th:unless = "${currentPage < totalPages}">next</span>
+							</div>
+							<div class = "col-sm-1">
+								<a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${totalPages}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Last</a>
+								<span th:unless = "${currentPage < totalPages}">Last</span>
+							</div>
+							
+						</div>
+						</div>
+					<div class="ms-auto">
+						<a th:href="@{/showNewEmployeeForm}" class="btn btn-primary">Add New</a>
+					</div>
+				</div>
+				
+				<div th:replace="fragments/comman :: footer"></div>
+			</div>	
+		</div>		
 	</body>
 </html>

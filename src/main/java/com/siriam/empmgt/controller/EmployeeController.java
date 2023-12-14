@@ -22,10 +22,7 @@ public class EmployeeController {
 	@Autowired
 	private EmployeeService empServ;
 	
-	@GetMapping
-	public String getHome() {
-		return "index";
-	}
+	
 	
 	//without pagination
 	/*@GetMapping("emplist")
@@ -83,7 +80,8 @@ public class EmployeeController {
 	
 	//page/1?sortField=name & sortDir=ASC // with sorting
 	@GetMapping("/page/{pageNo}")
-	public String findPaginated( @PathVariable (value="pageNo") int pageNo, 
+	public String findPaginated( 
+			@PathVariable (value="pageNo") int pageNo, 
 			@RequestParam ("sortField") String sortField,
 			@RequestParam ("sortDir") String sortDir,
 			Model model) {

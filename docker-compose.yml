@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+ app:
+  image: final-empmgp:latest
+  ports:
+   - 9090:9090
+  env_file: .env
+  environment:
+   SPRING_DATASOURCE_URL: '${DATASOURCE_URL}'
+   SPRING_DATASOURCE_USERNAME: '${MYSQL_USER}'
+   SPRING_DATASOURCE_PASSWORD: '${MYSQL_PASSWORD}'
+  networks:
+   - spring-network
+  depends_on:
+   - database
+ 
+ 
+ database:
+  image: mariadb:10.6.4-focal
+  restart: always
+  ports:
+   - 3306:3306
+  env_file: .env
+  environment:
+   MYSQL_ROOT_PASSWORD: '${MYSQL_ROOT_PASSWORD}'
+   MYSQL_DATABASE: '${MYSQL_DATABASE}'
+   MYSQL_USER: '${MYSQL_USER}'
+   MYSQL_PASSWORD: '${MYSQL_PASSWORD}'
+  volumes:
+   - db-data:/var/lib/mysql
+  networks:
+   - spring-network
+
+ 
+ phpmyadmin:
+  depends_on:
+   - database
+  image: phpmyadmin/phpmyadmin
+  restart: always
+  ports:
+   - 8081:80
+  env_file: .env
+  environment:
+   PMA_HOST: database
+   MYSQL_ROOT_PASSWORD: '${MYSQL_ROOT_PASSWORD}'
+
+  networks:
+   - spring-network
+
+volumes:
+ db-data:
+
+networks:
+ spring-network:
+  driver: bridge
+  

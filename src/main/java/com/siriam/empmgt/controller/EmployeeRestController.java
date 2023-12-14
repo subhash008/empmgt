@@ -59,7 +59,7 @@ public class EmployeeRestController {
 			empSrv.saveEmployee(emp);
 		}
 		catch(EmployeeAlreadyExistsException ex) {
-			log.error("Error in adding employee",ex.getMessage());
+	
 			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(ex.getMessage());
 		}
 		return ResponseEntity.status(HttpStatus.CREATED).body(emp);

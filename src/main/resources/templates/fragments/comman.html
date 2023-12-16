@@ -53,38 +53,38 @@
 
 
 
- <div th:fragment="left-sidebar" class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px;">
-    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-      <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
+ <div th:fragment="left-sidebar" class="d-flex flex-column flex-shrink-0 p-3  alert alert-primary" style="width: 280px;height: 500px;">
+   
+    <div class="primary" >
       <span class="fs-4">Quick Links</span>
-    </a>
+    </div>
     <hr>
-    <ul class="nav nav-pills flex-column mb-auto">
+    <ul class="nav nav-pills flex-column ">
       <li class="nav-item">
-        <a href="http://localhost:9090" class="nav-link" >
+        <a href="http://localhost:9090" th:class="${page=='index'} ? 'nav-link active' : 'nav-link'" >
           <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"/></svg>
           Home
         </a>
       </li>
-      <li>
+      <li class="nav-item">
         <a href="#" class="nav-link " >
           <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"/></svg>
           Dashboard
         </a>
       </li>
-      <li>
-        <a th:href="@{/emplist}" class="nav-link ">
+      <li class="nav-item">
+        <a th:href="@{/emplist}" th:class="${page=='emplist'} ? 'nav-link active' : 'nav-link'">
           <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"/></svg>
-          Manage Employees
+          Manage Employees 
         </a>
       </li>
-      <li>
-        <a th:href="@{/showNewEmployeeForm}" class="nav-link ">
+      <liclass="nav-item">
+        <a th:href="@{/showNewEmployeeForm}" th:class="${page=='showNewEmployeeForm'} ? 'nav-link active' : 'nav-link'">
           <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
           Add Employee
         </a>
       </li>
-      <li>
+      <li class="nav-item">
         <a href="#" class="nav-link ">
           <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
           Customers

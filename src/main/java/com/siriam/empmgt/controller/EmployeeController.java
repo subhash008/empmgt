@@ -51,6 +51,7 @@ public class EmployeeController {
 		
 		Employee emp=new Employee();
 		model.addAttribute("employee",emp);
+		model.addAttribute("page", "showNewEmployeeForm");
 		return "new_employee";
 	}
 	
@@ -68,7 +69,9 @@ public class EmployeeController {
 		Employee employee= empServ.getEmployeeById(id);
 		
 		model.addAttribute("employee",employee);
+		
 		return "update_employee";
+		
 	}
 	
 	@GetMapping("/deleteEmployee/{id}")
@@ -95,6 +98,7 @@ public class EmployeeController {
 		model.addAttribute("sortDir", sortDir);
 		model.addAttribute("sortField", sortField);
 		model.addAttribute("reverseSortDir", sortDir.equalsIgnoreCase("asc") ? "desc" : "asc");
+		model.addAttribute("page", "emplist");
 		
 		return "emplist";
 	}

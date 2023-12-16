@@ -41,7 +41,7 @@ public class EmployeeController {
 	*/
 	
 	//with sorting
-	@GetMapping("emplist")
+	@GetMapping("/emplist")
 	public String viewEmployees(Model model) {
 		return findPaginated(1,"firstName","asc",model);
 		
